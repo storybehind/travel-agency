@@ -1,7 +1,7 @@
 package org.example.service;
 
-import jakarta.transaction.Transactional;
 import org.example.domain.entity.Activity;
+import org.example.domain.entity.Itinerary;
 import org.example.domain.entity.Passenger;
 import org.example.domain.entity.TravelPackage;
 import org.example.domain.repository.ActivityRepository;
@@ -10,10 +10,10 @@ import org.example.domain.repository.TravelPackageRepository;
 import org.example.service.signup.SignUpActivityFactory;
 import org.example.utils.ApiException;
 import org.example.utils.constant.ErrorCode;
-import org.example.utils.model.SignUpRequestModel;
-import org.example.utils.model.SignUpResponseModel;
+import org.example.utils.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +61,52 @@ public class TravelPackageService {
         }
 
         return signUpActivityFactory.getService(passenger.getMembership()).signUp(travelPackage, activities, passenger);
+    }
+
+    @Transactional(readOnly = true)
+    public TravelPackageResponseModel getTravelPackageResponseModel(int travelPackageId) throws ApiException {
+        Optional<TravelPackage> travelPackageOptional = travelPackageRepository.findById(travelPackageId);
+        TravelPackage travelPackage =  travelPackageOptional.orElseThrow(() -> new ApiException(ErrorCode.INVALID_TRAVEL_PACKAGE_IDENTIFIER));
+
+        TravelPackageResponseModel travelPackageResponseModel = new TravelPackageResponseModel();
+        travelPackageResponseModel.setTravelPackageName(travelPackage.getName());
+        List<ItineraryResponseModel> itineraryResponseModels = new ArrayList<>();
+        for (Itinerary itinerary : travelPackage.getItineraries()) {
+            ItineraryResponseModel itineraryResponseModel = new ItineraryResponseModel();
+            List<ActivityResponseModel> activityResponseModels = new ArrayList<>();
+            for (Activity activity : itinerary.getActivitySet()) {
+                ActivityResponseModel activityResponseModel = new ActivityResponseModel();
+                activityResponseModel.setName(activity.getName());
+                activityResponseModel.setDescription(activity.getDescription());
+                activityResponseModel.setCost(activity.getCost());
+                activityResponseModel.setCapacity(activity.getCapacity());
+                activityResponseModels.add(activityResponseModel);
+            }
+            itineraryResponseModel.setItineraryName(itinerary.getName());
+            itineraryResponseModel.setActivities(activityResponseModels);
+        }
+        travelPackageResponseModel.setItineraries(itineraryResponseModels);
+        return travelPackageResponseModel;
+    }
+
+    @Transactional(readOnly = true)
+    public TravelPackagePassengerResponseModel getTravelPackagePassengerResponseModel(int travelPackageId) throws ApiException {
+        Optional<TravelPackage> travelPackageOptional = travelPackageRepository.findById(travelPackageId);
+        TravelPackage travelPackage =  travelPackageOptional.orElseThrow(() -> new ApiException(ErrorCode.INVALID_TRAVEL_PACKAGE_IDENTIFIER));
+
+        TravelPackagePassengerResponseModel travelPackagePassengerResponseModel = new TravelPackagePassengerResponseModel();
+        travelPackagePassengerResponseModel.setTravelPackageName(travelPackage.getName());
+        travelPackagePassengerResponseModel.setPassengerCapacity(travelPackage.getPassengerCapacity());
+        travelPackagePassengerResponseModel.setPassengersEnrolled(travelPackage.getPassengers().size());
+        List<TravelPackagePassengerResponseModel.PassengerModel> passengerModels = new ArrayList<>();
+        for (Passenger passenger : travelPackage.getPassengers()) {
+            TravelPackagePassengerResponseModel.PassengerModel passengerModel = new TravelPackagePassengerResponseModel.PassengerModel();
+            passengerModel.setPassengerNumber(passenger.getPassengerNumber());
+            passengerModel.setName(passenger.getName());
+            passengerModels.add(passengerModel);
+        }
+        travelPackagePassengerResponseModel.setPassengers(passengerModels);
+        return travelPackagePassengerResponseModel;
     }
 
 }

@@ -6,11 +6,11 @@ import org.example.domain.entity.Passenger;
 import org.example.domain.entity.TravelPackage;
 import org.example.domain.repository.LedgerRepository;
 import org.example.utils.ApiException;
-import org.example.utils.constant.ErrorCode;
 import org.example.utils.constant.PassengerMembership;
 import org.example.utils.model.SignUpResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ public class PremiumPassengerSignUp implements SignUpActivity {
     static BigDecimal requiredCost = new BigDecimal("0");
 
     @Override
+    @Transactional
     public SignUpResponseModel signUp(TravelPackage travelPackage, List<Activity> activities, Passenger passenger) throws ApiException {
         List<SignUpResponseModel.ActivityResponseModel> activityResponseModels = new ArrayList<>();
         for (Activity activity : activities) {

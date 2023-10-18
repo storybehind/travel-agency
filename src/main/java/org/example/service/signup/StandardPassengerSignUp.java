@@ -1,18 +1,17 @@
 package org.example.service.signup;
 
-import jakarta.transaction.Transactional;
 import org.example.domain.entity.Activity;
 import org.example.domain.entity.Ledger;
 import org.example.domain.entity.Passenger;
 import org.example.domain.entity.TravelPackage;
 import org.example.domain.repository.LedgerRepository;
-import org.example.service.signup.SignUpActivity;
 import org.example.utils.ApiException;
 import org.example.utils.constant.ErrorCode;
 import org.example.utils.constant.PassengerMembership;
 import org.example.utils.model.SignUpResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

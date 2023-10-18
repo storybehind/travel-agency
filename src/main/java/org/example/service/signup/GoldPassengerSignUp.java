@@ -11,6 +11,7 @@ import org.example.utils.constant.PassengerMembership;
 import org.example.utils.model.SignUpResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class GoldPassengerSignUp implements SignUpActivity {
     static BigDecimal discountFraction = new BigDecimal("0.1");
 
     @Override
+    @Transactional
     public SignUpResponseModel signUp(TravelPackage travelPackage, List<Activity> activities, Passenger passenger) throws ApiException {
         List<SignUpResponseModel.ActivityResponseModel> activityResponseModels = new ArrayList<>();
         BigDecimal totalCostRequired = new BigDecimal("0");
