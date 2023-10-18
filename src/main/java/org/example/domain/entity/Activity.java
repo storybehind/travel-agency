@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.domain.entity;
 
 import jakarta.persistence.*;
 
@@ -26,7 +26,7 @@ public class Activity {
     private int capacity;
 
     @ManyToOne
-    @JoinColumn(name = "itinerary_name", referencedColumnName = "name")
+    @JoinColumn(name = "itinerary_id")
     private Itinerary itinerary;
 
     public String getName() {
@@ -51,6 +51,10 @@ public class Activity {
 
     public int getId() {
         return id;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     @Override

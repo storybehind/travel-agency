@@ -1,4 +1,4 @@
-package org.example.entity;
+package org.example.domain.entity;
 
 import jakarta.persistence.*;
 
@@ -41,5 +41,21 @@ public class Ledger {
 
     public BigDecimal getPricePaid() {
         return pricePaid;
+    }
+
+    public void setTravelPackage(TravelPackage travelPackage) {
+        this.travelPackage = travelPackage;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+    }
+
+    public void setPricePaid(BigDecimal pricePaid) {
+        this.pricePaid = pricePaid;
     }
 }

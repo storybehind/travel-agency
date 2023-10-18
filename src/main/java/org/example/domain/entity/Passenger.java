@@ -1,6 +1,6 @@
-package org.example.entity;
+package org.example.domain.entity;
 
-import org.example.constant.PassengerMembership;
+import org.example.utils.constant.PassengerMembership;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -44,6 +44,10 @@ public class Passenger {
 
     public BigDecimal getBalance() {
         return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     public Set<TravelPackage> getTravelPackageSet() {

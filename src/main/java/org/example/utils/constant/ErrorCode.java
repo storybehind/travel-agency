@@ -1,0 +1,22 @@
+package org.example.utils.constant;
+
+public enum ErrorCode {
+
+    INVALID_TRAVEL_PACKAGE_IDENTIFIER("INVALID_TRAVEL_PACKAGE_IDENTIFIER"),
+    INVALID_PASSENGER_IDENTIFIER("INVALID_PASSENGER_IDENTIFIER"),
+    INVALID_ACTIVITY_IDENTIFIER("INVALID_ACTIVITY_IDENTIFIER"),
+    ACTIVITY_NOT_PRESENT_IN_TRAVEL_PACKAGE("ACTIVITY_NOT_PRESENT_IN_TRAVEL_PACKAGE"),
+    PASSENGER_LIMIT_REACHED("PASSENGER_LIMIT_REACHED"),
+    INSUFFICIENT_FUND("INSUFFICIENT_FUND"),
+    ACTIVITY_CAPACITY_REACHED("ACTIVITY_CAPACITY_REACHED");
+
+    private String errorMessage;
+
+    ErrorCode(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+}
