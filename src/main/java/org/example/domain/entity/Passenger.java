@@ -61,6 +61,22 @@ public class Passenger {
         }
     }
 
+    public void setPassengerNumber(int passengerNumber) {
+        this.passengerNumber = passengerNumber;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMembership(PassengerMembership membership) {
+        this.membership = membership;
+    }
+
+    public void setTravelPackageSet(Set<TravelPackage> travelPackageSet) {
+        this.travelPackageSet = travelPackageSet;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

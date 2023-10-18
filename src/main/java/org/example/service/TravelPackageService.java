@@ -84,6 +84,7 @@ public class TravelPackageService {
             }
             itineraryResponseModel.setItineraryName(itinerary.getName());
             itineraryResponseModel.setActivities(activityResponseModels);
+            itineraryResponseModels.add(itineraryResponseModel);
         }
         travelPackageResponseModel.setItineraries(itineraryResponseModels);
         return travelPackageResponseModel;

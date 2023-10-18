@@ -57,6 +57,26 @@ public class Activity {
         this.capacity = capacity;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    public void setItinerary(Itinerary itinerary) {
+        this.itinerary = itinerary;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

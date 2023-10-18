@@ -66,6 +66,26 @@ public class TravelPackage {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassengerCapacity(int passengerCapacity) {
+        this.passengerCapacity = passengerCapacity;
+    }
+
+    public void setItineraries(Set<Itinerary> itineraries) {
+        this.itineraries = itineraries;
+    }
+
+    public void setPassengers(Set<Passenger> passengers) {
+        this.passengers = passengers;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

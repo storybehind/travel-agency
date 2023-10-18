@@ -12,15 +12,15 @@ public class Ledger {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "travel_package_name")
+    @ManyToOne
+    @JoinColumn(name = "travel_package_id")
     private TravelPackage travelPackage;
 
-    @OneToOne
-    @JoinColumn(name = "activity_name")
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
     private Activity activity;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "passenger_number")
     private Passenger passenger;
 
@@ -57,5 +57,13 @@ public class Ledger {
 
     public void setPricePaid(BigDecimal pricePaid) {
         this.pricePaid = pricePaid;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

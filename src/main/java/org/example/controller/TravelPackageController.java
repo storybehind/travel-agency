@@ -28,7 +28,7 @@ public class TravelPackageController {
     }
 
     @GetMapping("{id}/passengers")
-    public ApiResponse<TravelPackagePassengerResponseModel> travelPackagePassengerResponseModelApiResponse(int id) throws ApiException {
+    public ApiResponse<TravelPackagePassengerResponseModel> travelPackagePassengerResponseModelApiResponse(@PathVariable("id") int id) throws ApiException {
         return new ApiResponse<>(travelPackageService.getTravelPackagePassengerResponseModel(id));
     }
 }

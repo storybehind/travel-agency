@@ -34,7 +34,7 @@ public class PassengerService {
         passengerResponseModel.setName(passenger.getName());
         passengerResponseModel.setBalance(passenger.getBalance());
         List<PassengerResponseModel.ActivityModel> activityModels = new ArrayList<>();
-        List<Ledger> ledgers = ledgerRepository.findByPassengerNumber(passengerNumber);
+        List<Ledger> ledgers = ledgerRepository.findByPassenger(passenger);
         for (Ledger ledger : ledgers) {
             PassengerResponseModel.ActivityModel activityModel = new PassengerResponseModel.ActivityModel();
             activityModel.setActivityName(ledger.getActivity().getName());

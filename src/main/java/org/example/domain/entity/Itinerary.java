@@ -39,6 +39,22 @@ public class Itinerary {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setActivitySet(Set<Activity> activitySet) {
+        this.activitySet = activitySet;
+    }
+
+    public void setTravelPackages(Set<TravelPackage> travelPackages) {
+        this.travelPackages = travelPackages;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -2,7 +2,7 @@ package org.example.utils;
 
 import org.example.utils.constant.ErrorCode;
 
-public class ApiException extends Exception {
+public class ApiException extends RuntimeException {
 
     private String code, message;
 

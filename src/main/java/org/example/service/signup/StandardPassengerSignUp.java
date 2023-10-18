@@ -1,5 +1,6 @@
 package org.example.service.signup;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.domain.entity.Activity;
 import org.example.domain.entity.Ledger;
 import org.example.domain.entity.Passenger;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class StandardPassengerSignUp implements SignUpActivity {
 
     @Autowired
