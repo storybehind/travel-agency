@@ -16,6 +16,9 @@ public class ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
 
+    /**
+     * Returns {@link List of {@link ActivityResponseModel}} that have atleast one capacity
+     */
     public List<ActivityResponseModel> getAllAvailableActivities() {
         List<Activity> activities = activityRepository.findAll();
         List<Activity> availableActivities = activities.stream().filter((activity -> activity.getCapacity() > 0)).collect(Collectors.toList());

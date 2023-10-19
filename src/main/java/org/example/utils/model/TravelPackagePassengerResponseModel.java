@@ -1,63 +1,45 @@
 package org.example.utils.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+@Getter
+@Setter
 public class TravelPackagePassengerResponseModel {
+
+    /**
+     * Name of travelPackage
+     */
     private String travelPackageName;
+
+    /**
+     * Maximum number of passengers allowed to sign up
+     */
     private int passengerCapacity;
+
+    /**
+     * Number of passengers currently signed up
+     */
     private int passengersEnrolled;
+
+    /**
+     * Details of all signed up passenger
+     */
     private List<PassengerModel> passengers;
 
+    @Getter
+    @Setter
     public static class PassengerModel {
+        /**
+         * Unique passenger number
+         */
         private int passengerNumber;
+
+        /**
+         * Name of passenger
+         */
         private String name;
-
-        public int getPassengerNumber() {
-            return passengerNumber;
-        }
-
-        public void setPassengerNumber(int passengerNumber) {
-            this.passengerNumber = passengerNumber;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
-    public String getTravelPackageName() {
-        return travelPackageName;
-    }
-
-    public void setTravelPackageName(String travelPackageName) {
-        this.travelPackageName = travelPackageName;
-    }
-
-    public int getPassengerCapacity() {
-        return passengerCapacity;
-    }
-
-    public void setPassengerCapacity(int passengerCapacity) {
-        this.passengerCapacity = passengerCapacity;
-    }
-
-    public int getPassengersEnrolled() {
-        return passengersEnrolled;
-    }
-
-    public void setPassengersEnrolled(int passengersEnrolled) {
-        this.passengersEnrolled = passengersEnrolled;
-    }
-
-    public List<PassengerModel> getPassengers() {
-        return passengers;
-    }
-
-    public void setPassengers(List<PassengerModel> passengers) {
-        this.passengers = passengers;
     }
 }

@@ -24,6 +24,10 @@ public class PassengerService {
     @Autowired
     private LedgerRepository ledgerRepository;
 
+    /**
+     * Returns {@link PassengerResponseModel} on successful retrieval
+     * Throws {@link ApiException} with {@link ErrorCode#INVALID_PASSENGER_IDENTIFIER} if passengerNumber is invalid
+     */
     @Transactional(readOnly = true)
     public PassengerResponseModel getPassengerResponseModel(int passengerNumber) throws ApiException {
         Optional<Passenger> passengerOptional = passengerRepository.findById(passengerNumber);
