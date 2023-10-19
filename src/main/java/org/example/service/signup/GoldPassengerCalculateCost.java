@@ -17,17 +17,20 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GoldPassengerCalculateCost implements {@link CalculateCostActivity} for {@link PassengerMembership#GOLD} membership
+ */
 @Service
-public class GoldPassengerSignUp implements SignUpActivity {
+public class GoldPassengerCalculateCost implements CalculateCostActivity {
 
-    @Autowired
-    private LedgerRepository ledgerRepository;
+    static final BigDecimal discountFraction = new BigDecimal("0.1");
 
-    static BigDecimal discountFraction = new BigDecimal("0.1");
-
+    /**
+     * Calculates cost for GOLD passenger
+     * Returns {@link List of {@link org.example.utils.model.SignUpResponseModel.ActivityResponseModel}}
+     */
     @Override
-    @Transactional
-    public SignUpResponseModel signUp(TravelPackage travelPackage, List<Activity> activities, Passenger passenger) throws ApiException {
+    public List<SignUpResponseModel.ActivityResponseModel> calculateCost(List<Activity> activities) throws ApiException {
         List<SignUpResponseModel.ActivityResponseModel> activityResponseModels = new ArrayList<>();
         BigDecimal totalCostRequired = new BigDecimal("0");
 
@@ -41,27 +44,7 @@ public class GoldPassengerSignUp implements SignUpActivity {
             activityResponseModel.setCostPaid(requiredCost);
             activityResponseModels.add(activityResponseModel);
         }
-        if (totalCostRequired.compareTo(passenger.getBalance()) > 0) {
-            throw new ApiException(ErrorCode.INSUFFICIENT_FUND, "TotalCostRequired = " + totalCostRequired + " , balance = " + passenger.getBalance());
-        }
-
-        travelPackage.addPassenger(passenger);
-        passenger.setBalance(passenger.getBalance().subtract(totalCostRequired));
-        List<Ledger> ledgers = new ArrayList<>();
-        for (Activity activity : activities) {
-            Ledger ledger = new Ledger();
-            ledger.setTravelPackage(travelPackage);
-            ledger.setActivity(activity);
-            ledger.setPassenger(passenger);
-            ledger.setPricePaid(activity.getCost());
-            ledgers.add(ledger);
-        }
-        ledgerRepository.saveAll(ledgers);
-
-        SignUpResponseModel signUpResponseModel = new SignUpResponseModel();
-        signUpResponseModel.setActivityResponseModels(activityResponseModels);
-        signUpResponseModel.setBalance(passenger.getBalance());
-        return signUpResponseModel;
+        return activityResponseModels;
     }
 
     @Override

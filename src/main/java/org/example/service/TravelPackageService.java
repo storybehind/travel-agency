@@ -1,10 +1,8 @@
 package org.example.service;
 
-import org.example.domain.entity.Activity;
-import org.example.domain.entity.Itinerary;
-import org.example.domain.entity.Passenger;
-import org.example.domain.entity.TravelPackage;
+import org.example.domain.entity.*;
 import org.example.domain.repository.ActivityRepository;
+import org.example.domain.repository.LedgerRepository;
 import org.example.domain.repository.PassengerRepository;
 import org.example.domain.repository.TravelPackageRepository;
 import org.example.service.signup.SignUpActivityFactory;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +31,27 @@ public class TravelPackageService {
     private ActivityRepository activityRepository;
 
     @Autowired
+    private LedgerRepository ledgerRepository;
+
+    @Autowired
     private SignUpActivityFactory signUpActivityFactory;
 
+    /**
+     * <p>Signs Up a given passenger to the list of activities present in travel package</p>
+     *
+     * <p>On Successful SignUp, return {@link SignUpResponseModel}. The SignUp is successful only if all activities can be signed up</p>
+     *
+     * <p>Throws {@link ApiException} with following {@link ErrorCode}</p>
+     *
+     * <p>{@link ErrorCode#INVALID_TRAVEL_PACKAGE_IDENTIFIER} if travelPackageId of {@link SignUpRequestModel} is invalid</p>
+     * <p>{@link ErrorCode#INVALID_PASSENGER_IDENTIFIER} if passengerNumber of {@link SignUpRequestModel} is invalid</p>
+     * <p>{@link ErrorCode#INVALID_ACTIVITY_IDENTIFIER} if any of the activityId of {@link SignUpRequestModel} is invalid</p>
+     * <p>{@link ErrorCode#ACTIVITY_NOT_PRESENT_IN_TRAVEL_PACKAGE} if any of the activityId doesn't belong to travelPackageId of {@link SignUpRequestModel}</p>
+     *
+     * <p>{@link ErrorCode#ACTIVITY_CAPACITY_REACHED} if any of the activities doesn't have enough capacity</p>
+     * <p>{@link ErrorCode#PASSENGER_LIMIT_REACHED} if travelPackage has reached its passenger limit</p>
+     * <p>{@link ErrorCode#INSUFFICIENT_FUND} if passenger doesn't have enough balance to sign up all the activities</p>
+     */
     @Transactional
     public SignUpResponseModel signUp(SignUpRequestModel signUpRequestModel) throws ApiException {
         Optional<TravelPackage> travelPackageOptional = travelPackageRepository.findById(signUpRequestModel.getTravelPackageId());
@@ -60,9 +78,38 @@ public class TravelPackageService {
             throw new ApiException(ErrorCode.PASSENGER_LIMIT_REACHED, "Travel Package ID : " + travelPackage.getId() + "reached its limit");
         }
 
-        return signUpActivityFactory.getService(passenger.getMembership()).signUp(travelPackage, activities, passenger);
+        List<SignUpResponseModel.ActivityResponseModel> activityResponseModels = signUpActivityFactory.getService(passenger.getMembership()).calculateCost(activities);
+        BigDecimal totalCostRequired = BigDecimal.ZERO;
+        for (SignUpResponseModel.ActivityResponseModel activityResponseModel : activityResponseModels) {
+            totalCostRequired = totalCostRequired.add(activityResponseModel.getCostPaid());
+        }
+        if (totalCostRequired.compareTo(passenger.getBalance()) > 0) {
+            throw new ApiException(ErrorCode.INSUFFICIENT_FUND, "TotalCostRequired = " + totalCostRequired + " , balance = " + passenger.getBalance());
+        }
+
+        travelPackage.addPassenger(passenger);
+        passenger.setBalance(passenger.getBalance().subtract(totalCostRequired));
+        List<Ledger> ledgers = new ArrayList<>();
+        for (Activity activity : activities) {
+            Ledger ledger = new Ledger();
+            ledger.setTravelPackage(travelPackage);
+            ledger.setActivity(activity);
+            ledger.setPassenger(passenger);
+            ledger.setPricePaid(activity.getCost());
+            ledgers.add(ledger);
+        }
+        ledgerRepository.saveAll(ledgers);
+
+        SignUpResponseModel signUpResponseModel = new SignUpResponseModel();
+        signUpResponseModel.setActivityResponseModels(activityResponseModels);
+        signUpResponseModel.setBalance(passenger.getBalance());
+        return signUpResponseModel;
     }
 
+    /**
+     * Returns {@link TravelPackageResponseModel} on successful retrieval
+     * Throws {@link ApiException} with {@link ErrorCode#INVALID_TRAVEL_PACKAGE_IDENTIFIER} if travelPackageId is invalid
+     */
     @Transactional(readOnly = true)
     public TravelPackageResponseModel getTravelPackageResponseModel(int travelPackageId) throws ApiException {
         Optional<TravelPackage> travelPackageOptional = travelPackageRepository.findById(travelPackageId);
@@ -90,6 +137,10 @@ public class TravelPackageService {
         return travelPackageResponseModel;
     }
 
+    /**
+     * Returns {@link TravelPackagePassengerResponseModel} on successful retrieval
+     * Throws {@link ApiException} with {@link ErrorCode#INVALID_TRAVEL_PACKAGE_IDENTIFIER} if travelPackageId is invalid
+     */
     @Transactional(readOnly = true)
     public TravelPackagePassengerResponseModel getTravelPackagePassengerResponseModel(int travelPackageId) throws ApiException {
         Optional<TravelPackage> travelPackageOptional = travelPackageRepository.findById(travelPackageId);

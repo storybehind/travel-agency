@@ -1,43 +1,35 @@
 package org.example.utils.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
+/**
+ * Model used to represent Activity
+ */
+@Getter
+@Setter
 public class ActivityResponseModel {
 
+    /**
+     * Activity name
+     */
     private String name;
+
+    /**
+     * Activity description
+     */
     private String description;
+
+    /**
+     * Activity cost
+     */
     private BigDecimal cost;
+
+    /**
+     * Activity remaining capacity
+     */
     private int capacity;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
 }

@@ -16,17 +16,20 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * PremiumPassengerCalculateCost implements {@link CalculateCostActivity} for {@link PassengerMembership#PREMIUM} membership
+ */
 @Service
-public class PremiumPassengerSignUp implements SignUpActivity {
+public class PremiumPassengerCalculateCost implements CalculateCostActivity {
 
-    @Autowired
-    private LedgerRepository ledgerRepository;
+    static final BigDecimal requiredCost = new BigDecimal("0");
 
-    static BigDecimal requiredCost = new BigDecimal("0");
-
+    /**
+     * Calculates cost for PREMIUM passenger
+     * Returns {@link List of {@link org.example.utils.model.SignUpResponseModel.ActivityResponseModel}}
+     */
     @Override
-    @Transactional
-    public SignUpResponseModel signUp(TravelPackage travelPackage, List<Activity> activities, Passenger passenger) throws ApiException {
+    public List<SignUpResponseModel.ActivityResponseModel> calculateCost(List<Activity> activities) throws ApiException {
         List<SignUpResponseModel.ActivityResponseModel> activityResponseModels = new ArrayList<>();
         for (Activity activity : activities) {
             SignUpResponseModel.ActivityResponseModel activityResponseModel = new SignUpResponseModel.ActivityResponseModel();
@@ -35,23 +38,7 @@ public class PremiumPassengerSignUp implements SignUpActivity {
             activityResponseModel.setCostPaid(requiredCost);
             activityResponseModels.add(activityResponseModel);
         }
-
-        travelPackage.addPassenger(passenger);
-        List<Ledger> ledgers = new ArrayList<>();
-        for (Activity activity : activities) {
-            Ledger ledger = new Ledger();
-            ledger.setTravelPackage(travelPackage);
-            ledger.setActivity(activity);
-            ledger.setPassenger(passenger);
-            ledger.setPricePaid(activity.getCost());
-            ledgers.add(ledger);
-        }
-        ledgerRepository.saveAll(ledgers);
-
-        SignUpResponseModel signUpResponseModel = new SignUpResponseModel();
-        signUpResponseModel.setActivityResponseModels(activityResponseModels);
-        signUpResponseModel.setBalance(passenger.getBalance());
-        return signUpResponseModel;
+        return activityResponseModels;
     }
 
     @Override

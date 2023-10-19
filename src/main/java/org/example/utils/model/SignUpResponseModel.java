@@ -1,55 +1,47 @@
 package org.example.utils.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Model used to represent response after successful sign up
+ */
+@Getter
+@Setter
 public class SignUpResponseModel {
+
+    /**
+     * Details of activities that passenger has signed up
+     */
     private List<ActivityResponseModel> activityResponseModels;
+
+    /**
+     * Represents passenger's remaining balance
+     */
     private BigDecimal balance;
 
+    @Getter
+    @Setter
     public static class ActivityResponseModel {
+
+        /**
+         * Identifier of activity
+         */
         private int activityId;
+
+        /**
+         * Name of activity
+         */
         private String activityName;
+
+        /**
+         * Cost charged to passenger for the activity
+         */
         private BigDecimal costPaid;
 
-        public int getActivityId() {
-            return activityId;
-        }
-
-        public void setActivityId(int activityId) {
-            this.activityId = activityId;
-        }
-
-        public String getActivityName() {
-            return activityName;
-        }
-
-        public void setActivityName(String activityName) {
-            this.activityName = activityName;
-        }
-
-        public BigDecimal getCostPaid() {
-            return costPaid;
-        }
-
-        public void setCostPaid(BigDecimal costPaid) {
-            this.costPaid = costPaid;
-        }
     }
 
-    public List<ActivityResponseModel> getActivityResponseModels() {
-        return activityResponseModels;
-    }
-
-    public void setActivityResponseModels(List<ActivityResponseModel> activityResponseModels) {
-        this.activityResponseModels = activityResponseModels;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
 }

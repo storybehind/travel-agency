@@ -7,12 +7,16 @@ import org.example.utils.ApiException;
 import org.example.utils.constant.PassengerMembership;
 import org.example.utils.model.SignUpResponseModel;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
-public interface SignUpActivity {
+/**
+ * CalculateCostActivity for different passenger membership
+ */
+public interface CalculateCostActivity {
 
-    SignUpResponseModel signUp(TravelPackage travelPackage, List<Activity> activities, Passenger passenger) throws ApiException;
+    List<SignUpResponseModel.ActivityResponseModel> calculateCost(List<Activity> activities) throws ApiException;
 
     PassengerMembership getPassengerMemberShip();
 
