@@ -30,12 +30,6 @@ public class TravelAgencyApplicationTests {
     @Autowired
     private ActivityController activityController;
 
-    @Autowired
-    private TravelPackageService travelPackageService;
-
-    @Autowired
-    private ActivityService activityService;
-
     @Test
     @Sql({"/data.sql"})
     public void testTravelAgency() {
