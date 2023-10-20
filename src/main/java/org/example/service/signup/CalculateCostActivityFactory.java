@@ -13,7 +13,7 @@ import java.util.Map;
  * Factory class to get instance of concrete {@link CalculateCostActivity} based on {@link PassengerMembership}
  */
 @Service
-public class SignUpActivityFactory {
+public class CalculateCostActivityFactory {
 
     @Autowired
     private List<CalculateCostActivity> serviceList;

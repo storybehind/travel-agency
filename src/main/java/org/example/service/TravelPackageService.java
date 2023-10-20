@@ -5,7 +5,7 @@ import org.example.domain.repository.ActivityRepository;
 import org.example.domain.repository.LedgerRepository;
 import org.example.domain.repository.PassengerRepository;
 import org.example.domain.repository.TravelPackageRepository;
-import org.example.service.signup.SignUpActivityFactory;
+import org.example.service.signup.CalculateCostActivityFactory;
 import org.example.utils.ApiException;
 import org.example.utils.constant.ErrorCode;
 import org.example.utils.model.*;
@@ -34,7 +34,7 @@ public class TravelPackageService {
     private LedgerRepository ledgerRepository;
 
     @Autowired
-    private SignUpActivityFactory signUpActivityFactory;
+    private CalculateCostActivityFactory calculateCostActivityFactory;
 
     /**
      * <p>Signs Up a given passenger to the list of activities present in travel package</p>
@@ -78,7 +78,7 @@ public class TravelPackageService {
             throw new ApiException(ErrorCode.PASSENGER_LIMIT_REACHED, "Travel Package ID : " + travelPackage.getId() + "reached its limit");
         }
 
-        List<SignUpResponseModel.ActivityResponseModel> activityResponseModels = signUpActivityFactory.getService(passenger.getMembership()).calculateCost(activities);
+        List<SignUpResponseModel.ActivityResponseModel> activityResponseModels = calculateCostActivityFactory.getService(passenger.getMembership()).calculateCost(activities);
         BigDecimal totalCostRequired = BigDecimal.ZERO;
         for (SignUpResponseModel.ActivityResponseModel activityResponseModel : activityResponseModels) {
             totalCostRequired = totalCostRequired.add(activityResponseModel.getCostPaid());
